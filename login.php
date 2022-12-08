@@ -62,7 +62,7 @@ if (isset($u_level)) {
                     <h3>開始挑戰-學生登入</h3>
                 </div>
                 <div id="studentLogin">
-                    <form id="studentLoginform" action="" class="form-registered" method="post" >
+                    <form id="studentLoginform" action="./a.php" class="form-registered" method="post" >
 
                         <div class="form-group row">
                             <div class="col-md-4"><label>*開課教師帳號：</label></div>

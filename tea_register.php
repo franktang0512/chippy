@@ -5,12 +5,15 @@ include("inc/func.php");
 //這個只是要檢查註冊紐按下時是否有重複或奇怪字元
 if(isset($_GET["ch"])){
     $check_acc = $_GET["checkacc"];
+    // echo"hello";
     check($conn,$check_acc);
+    unset($_GET);
+    
     exit;
 
 }
 
-//todo: 確定Ok了就在這裡處理老師的相關資料
+//todo: 這邊先確認一下傳入的參數是否有攻擊的嫌疑
 
 
 
@@ -27,14 +30,17 @@ $_SESSION["account"]=$_POST["account"];
 $_SESSION["password"]=$_POST["password"];
 $_SESSION["email"]=$_POST["email"];
 // $_SESSION["level"]=$_POST["level"];
-// $_SESSION["school_id"]=$_POST["school"];
+$_SESSION["school_id"]=$_POST["school"];
 $_SESSION["u_level"]="1";
+// $_SESSION["u_id"] = "0";
+
+
 //users表建立一個帳號
 $sql ="select * from users";
 $result = mysqli_query($conn,$sql);
 $users_num = mysqli_num_rows($result);
-
-$sql = "INSERT INTO `users` (`uid`, `u_acc`, `u_psd`, `u_name`, `u_info`, `u_level`) 
+$_SESSION["u_id"] = $users_num;
+$sql = "INSERT INTO `users` (`u_id`, `u_acc`, `u_psd`, `u_name`, `u_info`, `u_level`) 
 VALUES ('".$users_num."',
          '".$_POST["account"]."', 
          '".$_POST["password"]."', 
@@ -42,25 +48,26 @@ VALUES ('".$users_num."',
          '', 
          '1')";
 $result = mysqli_query($conn,$sql);
+// echo $sql;
+// exit;
 
 //建立教師資料表
 
 $sql ="select * from teachers";
 $result = mysqli_query($conn,$sql);
-$users_num = mysqli_num_rows($result);
+$teachers_num = mysqli_num_rows($result);
 
-$sql = "INSERT INTO `users` (`uid`, `u_acc`, `u_psd`, `u_name`, `u_info`, `u_level`) 
-VALUES ('".$users_num."',
-         '".$_POST["account"]."', 
-         '".$_POST["password"]."', 
-         '".$_POST["name"]."', 
-         '', 
-         '1')";
+$email= $_POST["email"];
+$level=$_POST["level"];
+$school=$_POST["school"];
+
+$sql = "INSERT INTO `teachers` (`t_id`, `u_id`, `t_email`, `sch_id`) 
+VALUES ('".$teachers_num."',
+        '".$users_num."', 
+        '".$email."',  
+         '".$school."')";
+
 $result = mysqli_query($conn,$sql);
-
-
-
-
 
 header("Location:login_ok.php");
 

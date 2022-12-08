@@ -163,6 +163,12 @@
     font-weight: bold;
     font-size: x-large;
   }
+  .studentinfo {
+  
+    color: rgb(0, 0, 0);
+    /* font-weight: bold;
+    font-size: x-large; */
+  }
   
   .classnamebtn {
     color: #3115E8;

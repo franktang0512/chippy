@@ -7,7 +7,7 @@ echo "
     <div class='d-flex flex-wrap justify-content-left'>
         <a class='navbar-brand' href='./index.php'>
             <img src='./img/logo-small.png' style='width:5%;'>
-            Chippy 挑戰賽 
+            Chippy 挑戰賽 2.0
         </a>
     </div>";
 

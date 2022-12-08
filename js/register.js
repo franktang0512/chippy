@@ -200,48 +200,7 @@ function getExamLevelselect(id) {
 }
 
 
-function studentlist_preview() {
-    var studentlist = JSON.parse(localStorage.getItem('studentlist_Obj'));
-    var str = "";
-    str += '<div class="container precontent">';
-    str += '<span class="close">&times;</span>';
-    str += '<h3> 預覽學生名單 </h3>';
-    str += '<div class="row">';
-    str += '<div class="col header">學號</div>';
-    str += '<div class="col header">姓名</div>';
-    str += '<div class="col header">性別</div>';
-    str += '</div>';
-    for (var i = 0; i < studentlist.length; i++) {
-        if (i%2 == 0) {
-            str += '<div class="row even">';
-        }
-        else {
-            str += '<div class="row odd">';
-        }
-        str += '<div class="col pre">' + studentlist[i]['Student_ID'] +'</div>';
-        str += '<div class="col pre">' + studentlist[i]['Student_Name'] +'</div>';
-        str += '<div class="col pre">' + studentlist[i]['Gender'] +'</div>';
-        str += '</div>';
-    }
-    str += '請檢查學生學號、姓名是否正確，學生將以學號登入。<br> ＊若資料有誤，請確認檔案並重新上傳！＊<br>';
-    str += '</div>';
-    var preview = document.getElementById('preview');
-    preview.innerHTML = str; 
-    preview.style.display = "block";
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-    preview.style.display = "none";
-    }
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == preview) {
-            preview.style.display = "none";
-        }
-    }
-}
 
 function class_register_form() {
     var str = "";

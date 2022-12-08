@@ -1,7 +1,4 @@
 <?php
-/*查看相片的權限*/
-// include('seepic_.php');
-// include('prifix_title.php');
 $slide_menu = '
 <div class="container subnav">
 <div class="row d-flex flex-wrap justify-content-center">
@@ -13,11 +10,14 @@ $slide_menu = '
                 <input type="button" class="btn subbtn"  value="班級瀏覽" onclick="location.href=\'tea_class_manage.php\'">
             </div>
             <div class="col col-xs-12 col-md-2 col-lg-2 text-center px-4 py-3"> 
-                <input type="button" class="btn subbtn"  value="學生作答結果" onclick="location.href=\'tea_result.php\'">
+                <input type="button" class="btn subbtn"  value="編輯挑戰" onclick="location.href=\'tea_edit_tasks.php\'">
             </div>
             <div class="col col-xs-12 col-md-2 col-lg-2 text-center px-4 py-3"> 
-                <input type="button" class="btn subbtn"  value="學生作答紀錄" onclick="location.href=\'tea_record.php\'">
+                <input type="button" class="btn subbtn"  value="學生作答結果" onclick="location.href=\'tea_result.php\'">
             </div>
+            <!--div class="col col-xs-12 col-md-2 col-lg-2 text-center px-4 py-3"> 
+                <input type="button" class="btn subbtn"  value="學生作答紀錄" onclick="location.href=\'tea_record.php\'">
+            </div-->
             <div class="col col-xs-12 col-md-2 col-lg-2 text-center px-4 py-3"> 
                 <input type="button" class="btn subbtn"  value="題目瀏覽" onclick="location.href=\'tea_example.php\'">
             </div>

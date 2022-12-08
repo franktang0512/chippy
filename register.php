@@ -28,7 +28,7 @@ if (isset($u_level)) {
                 <div class="form-group row">
                     <div class="col-md-2"><label>使用者帳號*</label></div>
                     <div class="col-md-10">
-                        <input id="acc" type="text" name="account" class="form-control" placeholder="帳號僅接受5-15個英文字母或數字" maxlength="15" autofocus="" required="">
+                        <input id="acc" type="text" name="account" class="form-control" placeholder="帳號僅接受5-15個英文字母或數字" onchange="check_acc_exist();" maxlength="15" autofocus="" required="">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -88,7 +88,7 @@ if (isset($u_level)) {
                 </div>
                 <div class="row d-flex flex-wrap justify-content-center mt-5">
                     <div class="col-12 col-xs-6 col-md-6 col-lg-3 mb-3"><button class="btn btn-block btn-outline-dark btn-lg" type="reset"> 重填</button></div>
-                    <div class="col-12 col-xs-6 col-md-6 col-lg-3 mb-3"><button class="btn btn-block btn-primary btn-lg" type="submit" onclick="return check_acc_exist();">註冊</button></div>
+                    <div class="col-12 col-xs-6 col-md-6 col-lg-3 mb-3"><button class="btn btn-block btn-primary btn-lg" type="submit" >註冊</button></div>
                 </div>
             </form>
         </div>
@@ -100,15 +100,19 @@ if (isset($u_level)) {
     function check_acc_exist() {
         const acc = document.getElementById("acc");
         const xmlhttp = new XMLHttpRequest();
-        const url = "http://localhost/chippy/tea_register.php?ch=ch&checkacc=" + acc.value;
+        const url = "tea_register.php?ch=ch&checkacc=" + acc.value;
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 if (this.responseText.trim() != "") {
                     let response = this.responseText;
                     if (response != "") {
                         alert(response);
-                        history.go(0);
+                        // history.go(0);
+                        acc.style.borderColor = "#ff0000";
                     }
+
+                }else{
+                        acc.style.borderColor = "#ced4da";
                 }
             }
         };
@@ -129,7 +133,7 @@ if (isset($u_level)) {
         if ( d!= "--請選擇縣市--" &&  l!= "--請選擇學校類型--") {
 
             const xmlhttp = new XMLHttpRequest();
-            const url = "http://localhost/chippy/getschoollist.php?sch=sch&pro=" + d + "&level=" + l;
+            const url = "getschoollist.php?sch=sch&pro=" + d + "&level=" + l;
             xmlhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     if (this.responseText.trim() != "") {
