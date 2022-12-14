@@ -24,7 +24,18 @@ function check($conn,$check_acc)
         echo "";
     }
 }
+function Verify_student_info($pID)
+{
+    if (preg_match("/^[a-zA-Z0-9]/", $pID))  return true;
+    else {
+        $acc = 1;
+        echo $pID;
+        echo "輸入有誤，請重新輸入!  ";
+        header("Refresh: 1; url=login.php");			
+        // die("帳號必須為10碼英數字!");
 
+    }
+}
 
 function Verify_ID($pID)
 {

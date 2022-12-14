@@ -8,7 +8,10 @@ if (!isset($u_level)) {
 }
 // // include('stu_.php');
 // // include('slideshow.php');
-$sql = "SELECT * FROM `tasks` WHERE c_id=".$_SESSION["stu_c_id"];
+$t_id =$_SESSION["t_id"];
+
+$sql = "SELECT td_id,task_example.e_id,e_title FROM `tasks_detail` JOIN task_example 
+ON tasks_detail.t_id=".$t_id." AND task_example.e_id=tasks_detail.e_id";
 // echo $sql;
 // exit;
 $result = mysqli_query($conn, $sql);
@@ -16,7 +19,7 @@ $task_all_list='<main class="leaderboard__profiles">';
 while($row = mysqli_fetch_array($result)){
     $task_all_list.='    
     <article class="leaderboard__profile" onclick="showquestions(this.id)" id='.$row[0].'>
-    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mark Zuckerberg" class="leaderboard__picture">
+    <img src="./img/tasks/Frog.png" alt="Frog" class="leaderboard__picture">
     <span class="leaderboard__name">'.$row[2].'</span>
     </article>';
 }
@@ -24,7 +27,8 @@ $task_all_list.='</main>';
 $head_title='
 <link rel="stylesheet" href="./css/tasklist.css">
 <div>
-<h3 style="text-align: center!important;">任務列表</h3>
+<h3 style="text-align: center!important;">題目</h3>
+<button type="button" class="btn btn-secondary my-1 mx-2" onclick="location.href =\'stu.php\'">回任務列表</button>
 </div>';
 echo $head_title.$task_all_list;
 ?>
@@ -40,7 +44,7 @@ echo $head_title.$task_all_list;
                 if (this.responseText.trim() != "") {
                     // console.log(response.indexOf("ok")!==-1);
                     if (response.indexOf("ok") !== -1) {
-                        location.href ='stu_questions.php';
+                        location.href ='goalbased/stu_show_question.php';
                         // location.href = 'goalbased/tea_show_student_result.php';
                     } 
                 }
@@ -48,7 +52,7 @@ echo $head_title.$task_all_list;
         };
         xmlhttp.open("POST", "get_questions.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("showform=tid&t_id=" + check_id);
+        xmlhttp.send("showform=tdid&td_id=" + check_id);
     }
 
 </script>

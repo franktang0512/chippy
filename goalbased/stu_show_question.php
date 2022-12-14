@@ -10,22 +10,22 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
 }
 $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
-//todo:學生的名單
-$students="";
-$c_id=$_SESSION["c_id"];
-$sql = "SELECT stu_no,stu_id,s_name from students where c_id=".$c_id;
+// //todo:學生的名單
+// $students="";
+// $c_id=$_SESSION["c_id"];
+// $sql = "SELECT stu_no,stu_id,s_name from students where c_id=".$c_id;
 
-$result = mysqli_query($conn, $sql);
-while($row = mysqli_fetch_array($result)){
-    $students.='<a href="#" onClick="showstulast(this.id)" id="'.$row[0].'">'.$row[1].$row[2].'</a>';
+// $result = mysqli_query($conn, $sql);
+// while($row = mysqli_fetch_array($result)){
+//     $students.='<a href="#" onClick="showstulast(this.id)" id="'.$row[0].'">'.$row[1].$row[2].'</a>';
 
-}
-
-
-//todo:學生最後一次作答的結果呈現
+// }
 
 
-//todo:題目的資料
+// //todo:學生最後一次作答的結果呈現
+
+
+// //todo:題目的資料
 $td_id = $_SESSION["td_id"];
 $sql = "SELECT DISTINCT tasks_detail.td_id,task_example.e_id, task_example.e_title,tasks_detail.t_id FROM task_example INNER JOIN tasks_detail on task_example.e_id=tasks_detail.e_id AND tasks_detail.td_id =" . $td_id;
 
@@ -181,28 +181,20 @@ $e_title = $row[2];
         <!-- <div id="outer"> -->
     </div>
 
-    <div style="background-color: aqua; width: 10%; border-radius: 10px; margin: auto; text-align:center; font-size: 25;"><?php echo $e_title; ?></div>
+    <div style="background-color: aqua; width: 10%; border-radius: 10px; margin: auto; text-align:center; font-size: 25;"><h3><?php echo $e_title; ?></h3></div>
     <dialog id="hint" style="text-align:center">
         <p>將清空工作區, 是否確定轉換?</p>
         <button id="hint_yes">確認</button>
         <button id="hint_no" onclick="bbb();">取消</button>
     </dialog>
-    <div style="text-align: right;">
-        <span onclick="openstudentlist()">&#9776; 學生名單</span>
-        <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <?php echo $students;?>
-        </div>
-    </div>
-
 
     <div id="head_area">
         <select id="mode_select" class="btn btn-lg" style="border: solid;">
             <option value="blockly" selected>blockly</option>
             <option value="scratch">scratch</option>
         </select>
-        <button id="status" type="button" class="btn btn-outline-success btn-lg" onclick="changeBtn();">執行</button>
-        <button id="submit_button" class="btn btn-lg" onclick="submit_answer();" style="background-color: blue; color: white;" disabled>繳交</button>
+        <button id="status" type="button" class="btn btn-outline-success btn-lg" onclick="changeBtn();bbb();">執行</button>
+        <button id="submit_button" class="btn btn-lg" onclick="submit_answer();" style="background-color: blue; color: white;">繳交</button>
         <button id="clear_button" class="btn btn-outline-secondary btn-lg" onclick="clearCode()">
             <i class="fa-solid fa-trash-can"></i> Clear
         </button>
@@ -210,9 +202,10 @@ $e_title = $row[2];
         <button id="correct" type="button" class="btn btn-lg btn-outline-secondary" hidden disabled>挑戰完成</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
     </div>
+    
     <div id="blocklyDiv"></div>
     <div id="scratchDiv"></div>
-    <div id="view" class="column canvas-bg ">
+    <div id="view" style="margin-bottom: 50px;" class="column canvas-bg ">
         <div class="d-flex justify-content-center">
             <button class="btn btn-outline-primary m-1" onclick="show_question()" style="min-width:50px !important">題目</button>
             <button class="btn btn-outline-primary m-1" onclick="show_canvas()">動畫</button>
@@ -227,10 +220,8 @@ $e_title = $row[2];
             <img width="7%" align="left" src="libs/turtle-c.svg"><img width="7%" align="right" src="libs/rabbit-c.svg">&nbsp;<input type="range" class="custom-range" min="0" max="200" step="10" onChange="changeSpeed();" id="speed">&nbsp;&nbsp;&nbsp;<span class="badge badge-pill badge-secondary" id="speedValue">1x</span>
         </div>
     </div>
+    <!-- <div style="height: 50px;position: fixed;right: 0; bottom: 0; left: 0;"></div> -->
 
-
-    <!-- </div> -->
-    <!-- </div> -->
 
 
     <script>
@@ -483,7 +474,7 @@ $e_title = $row[2];
 
 
         function backtoquestion() {
-            location.href="../tea_result.php";
+            location.href="../stu_questions.php";
             // history.go(-1);
         }
         var aaaaa;
@@ -580,9 +571,9 @@ $e_title = $row[2];
                     }
                 }
             };
-            xmlhttp.open("POST", "show_single_student.php", true);
+            xmlhttp.open("POST", "stu_submit.php", true);
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send("func=sub&s_no=" + student_no+"&result="+xmlString);
+            xmlhttp.send("func=stusub"+"&result="+xmlString);
 
         }
         function showstulast(s_no){
@@ -619,7 +610,13 @@ $e_title = $row[2];
         }
     </script>
 
-
+    <footer class="footer footer-bg py-2 fixed-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-center">
+                © Computational Thinking @ CSIE NTNU
+            </div>
+        </div>
+    </footer>
 
 </body>
 

@@ -62,9 +62,74 @@ if (isset($_POST["account"])) {
         }
     }
 } else if (isset($_POST["teacheraccount"]) && isset($_POST["classname"]) && isset($_POST["studentnum"])) {
+    
+    if (!Verify_student_info($_POST["teacheraccount"]) || !Verify_student_info($_POST["studentnum"])) {
+        exit;
+    }
+    
+    
+    //找到老師的tea_id
+    $teaacc=$_POST["teacheraccount"];
+
+    $sql = "SELECT DISTINCT t_id,u_psd,u_name,users.u_id 
+            FROM users 
+            JOIN teachers ON u_acc= '".$teaacc."' AND users.u_id= teachers.u_id";
+    // echo $sql;
+    $result = mysqli_query($conn, $sql);
+    $numOfrow = mysqli_num_rows($result);
+    if($numOfrow==0){
+        echo "教師、班級、學號有誤，請重新輸入<br>";
+        // echo $errmsg . "<br><br>";
+        echo "<a href=\"login.php\">回上一頁</a>&nbsp;&nbsp;&nbsp;";
+        echo "</div>";
+        exit;
+    }
+    $row = mysqli_fetch_array($result);
+    $_SESSION["stu_t_id"]=$row[0];
+    //找到老師所屬班級的c_id 和班級名稱比對
+    $classname=$_POST["classname"];
+    $sql = "SELECT DISTINCT c_id 
+            FROM classes
+            JOIN teachers ON classes.c_name= '".$classname."' AND classes.tea_id= ".$_SESSION["stu_t_id"];
+    // echo $sql;
+    $result = mysqli_query($conn, $sql);
+    $numOfrow = mysqli_num_rows($result);
+    if($numOfrow==0){
+        echo "教師、班級、學號有誤，請重新輸入<br>";
+        // echo $errmsg . "<br><br>";
+        echo "<a href=\"login.php\">回上一頁</a>&nbsp;&nbsp;&nbsp;";
+        echo "</div>";
+        exit;
+    }
+    $row = mysqli_fetch_array($result);
+    $_SESSION["stu_c_id"]=$row[0];
+    
+    //確認是否有此學生
+    $studentnum=$_POST["studentnum"];
+    $sql = "SELECT DISTINCT stu_no,s_name
+            FROM students
+            JOIN classes ON classes.c_id= '".$_SESSION["stu_c_id"]."' AND classes.c_id= students.c_id AND students.stu_id='".$studentnum."'";
+    // echo $sql;
+    // exit;
+    $result = mysqli_query($conn, $sql);
+    $numOfrow = mysqli_num_rows($result);
+    if($numOfrow==0){
+        echo "教師、班級、學號有誤，請重新輸入<br>";
+        // echo $errmsg . "<br><br>";
+        echo "<a href=\"login.php\">回上一頁</a>&nbsp;&nbsp;&nbsp;";
+        echo "</div>";
+        exit;
+    }
+    $row = mysqli_fetch_array($result);
+    $_SESSION["stu_no"]=$row[0];
+
+
+
+    
+    
     $_SESSION["u_level"] = "0";
     
-    $_SESSION["u_name"] = "student";
+    $_SESSION["u_name"] = $row[1];
 
     header("Location:login_ok.php");
     //學生身分
