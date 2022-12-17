@@ -10,8 +10,11 @@ $showform = $_POST["showform"];
 if ($showform == "y") {
     $content = "";
     //接受按鈕按下後傳來了class id
-    $sql = "SELECT * FROM `students` WHERE stu_no=" . $stu_no;
+    $sql = "SELECT * FROM `students` WHERE stu_no=" . $stu_no. " AND disabled=0";
+    // echo $sql;
+    // exit;
     $result = mysqli_query($conn, $sql);
+
     $row = mysqli_fetch_array($result);
 
 
@@ -24,7 +27,7 @@ if ($showform == "y") {
         <div class="col header">學生姓名</div>
         <div class="col header">學生性別</div>
         <div class="col header">確認修改</div>
-        <!--div class="col header">刪除</div-->
+        <div class="col header">刪除</div>
     </div>
     <div class="row even">
     <!--div class="row odd"-->
@@ -32,7 +35,7 @@ if ($showform == "y") {
         <div class="col pre"><input type="text" id="s_name" value="' . $row[3] . '"/></div>
         <div class="col pre"><input type="text" id="gender" value="' . ($row[4] == 1 ? "男" : "女") . '"/></div>
         <div class="col pre"><input name="mod" type="button" id="' . $row[0] . '" onClick="updateStudent(this.id)" value="修改"/></div>
-        <!--div class="col pre"><input name="del" type="button" id="' . $row[0] . '" onClick="deleteStudent(this.id)" value="刪除"/></div-->
+        <div class="col pre"><input name="del" type="button" id="' . $row[0] . '" onClick="deleteStudent(this.id)" value="刪除"/></div>
     </div>
     ';
 
@@ -61,12 +64,12 @@ if ($showform == "y") {
     $stu_id = $_POST["stu_id"];
     $s_name = $_POST["s_name"];
     $gender = ($_POST["gender"] == "男" ? 1 : ($_POST["gender"] == "女" ? 2 : 4));
-    $sql = "SELECT COUNT(*) FROM `students`";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_array($result);
+    // $sql = "SELECT stu_no FROM `students` ORDER BY `students`.`stu_no` DESC";
+    // $result = mysqli_query($conn, $sql);
+    // $row = mysqli_fetch_array($result);
 
-    $sql = "INSERT INTO `students` (`stu_no`, `stu_id`, `c_id`, `s_name`, `gender`) 
-                            VALUES ('" . $row[0] . "', '" . $stu_id . "', '" . $_SESSION["c_id"] . "', '" . $s_name . "', '" . $gender . "')";
+    $sql = "INSERT INTO `students` (`stu_id`, `c_id`, `s_name`, `gender`) 
+                            VALUES ( '" . $stu_id . "', '" . $_SESSION["c_id"] . "', '" . $s_name . "', '" . $gender . "')";
 
     $result = mysqli_query($conn, $sql);
 
@@ -76,17 +79,17 @@ if ($showform == "y") {
         echo "Error";
     }
 } 
-// else if ($showform == "d") {
+else if ($showform == "d") {
 
-//     $stu_no = $_POST["stu_no"];
+    $stu_no = $_POST["stu_no"];
 
-//     $sql = "DELETE FROM `students` WHERE `students`.`stu_no` = " . $stu_no;
+    $sql = "UPDATE `students` SET `disabled` = '1' WHERE `students`.`stu_no` =" . $stu_no;
 
-//     $result = mysqli_query($conn, $sql);
-//     // $row=mysqli_fetch_row($result);
-//     if ($result) {
-//         echo "ok";
-//     } else {
-//         echo "Error";
-//     }
-// }
+    $result = mysqli_query($conn, $sql);
+    // $row=mysqli_fetch_row($result);
+    if ($result) {
+        echo "ok";
+    } else {
+        echo "Error";
+    }
+}

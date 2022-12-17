@@ -1,4 +1,8 @@
 <?php
+//非老師身分嘗試登入會被遣置index
+if($_SESSION["u_level"]!="1"){
+    header("Location:index.php");
+}
 $slide_menu = '
 <div class="container subnav">
 <div class="row d-flex flex-wrap justify-content-center">

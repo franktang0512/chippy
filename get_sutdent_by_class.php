@@ -6,7 +6,7 @@ $c_id=$_POST["c_id"];
 $_SESSION["c_id"]=$_POST["c_id"];
 $content = "";
 //接受按鈕按下後傳來了class id
-$sql = "SELECT c_name,c_grade FROM `classes` WHERE c_id=".$c_id;
+$sql = "SELECT c_name,c_grade FROM `classes` WHERE c_id=".$c_id ." AND disabled=0";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_array($result);
 $content.='
@@ -53,7 +53,7 @@ $content.='<div class="col text-left">'.$row[0].'</div>
 
 //classname, 年級,(評量狀態),,
 
-$sql = "SELECT stu_id,s_name,gender,stu_no FROM `students` WHERE c_id=".$c_id;
+$sql = "SELECT stu_id,s_name,gender,stu_no FROM `students` WHERE c_id=".$c_id." AND disabled= 0";
 $result = mysqli_query($conn, $sql);
 
 while($row = mysqli_fetch_array($result)){

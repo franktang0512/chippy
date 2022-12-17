@@ -27,13 +27,14 @@ while($row = mysqli_fetch_array($result)){
 
 //todo:題目的資料
 $td_id = $_SESSION["td_id"];
-$sql = "SELECT DISTINCT tasks_detail.td_id,task_example.e_id, task_example.e_title,tasks_detail.t_id FROM task_example INNER JOIN tasks_detail on task_example.e_id=tasks_detail.e_id AND tasks_detail.td_id =" . $td_id;
+$sql = "SELECT DISTINCT tasks_detail.td_id,task_example.e_id, task_example.e_title,tasks_detail.t_id,task_example.description FROM task_example INNER JOIN tasks_detail on task_example.e_id=tasks_detail.e_id AND tasks_detail.td_id =" . $td_id;
 
 $result = mysqli_query($conn, $sql);
 
 $row = mysqli_fetch_array($result);
 $e_title = $row[2];
 
+$e_description = $row[4];
 
 ?>
 
@@ -219,8 +220,7 @@ $e_title = $row[2];
             <button class="btn btn-outline-primary m-1" onclick="show_both()">題目+動畫</button>
         </div>
         <textarea id="question" readonly style="height: 100%; width: 100%; font-size: 25; resize: none;">
-            奇比要參加舞蹈比賽，請寫程式控制舞台燈開關，讓舞台上的燈光按照舞台下方的順序變化。
-            舞台上有三盞燈分別為紅燈、綠燈及藍燈，透過控制燈的開關，可以將不同燈光組合成新的顏色。
+        <?php echo $e_description?>
         </textarea>
         <div id="canvas_div" style="height: 100%; width: 100%; display: none;">
             <canvas id="draw" height="1024" width="1024"></canvas>

@@ -16,7 +16,7 @@ $task_all_list='<main class="leaderboard__profiles">';
 while($row = mysqli_fetch_array($result)){
     $task_all_list.='    
     <article class="leaderboard__profile" onclick="showquestions(this.id)" id='.$row[0].'>
-    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mark Zuckerberg" class="leaderboard__picture">
+    <img src="./img/tasks/Frog.png" alt="Mark Zuckerberg" class="leaderboard__picture">
     <span class="leaderboard__name">'.$row[2].'</span>
     </article>';
 }

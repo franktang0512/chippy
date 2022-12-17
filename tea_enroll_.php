@@ -13,7 +13,7 @@ include("inc/conn.php");
 //todo:建立班級
 $sql = "SELECT c_id FROM classes";
 $result = mysqli_query($conn,$sql);
-$numOfrow = mysqli_num_rows($result);
+// $numOfrow = mysqli_num_rows($result);
 
 $classname = $_POST["classname"];
 
@@ -38,12 +38,16 @@ if((date('m')<=12&&date('m')>=8)||(date('m')<2&&date('m')>=1)){
 }else{
     $term=2;
 }
-$sql_class = "INSERT INTO `classes` (`c_id`, `c_name`, `tea_id`, `sch_id`, `c_grade`, `year`, `term`, `exam_status`)
-            VALUES ('".$numOfrow."','".$classname."','".$tea_id."','".$sch_id."','".$grade."','".date('Y')."','".$term."','"."0"."')";
+$sql_class = "INSERT INTO `classes` ( `c_name`, `tea_id`, `sch_id`, `c_grade`, `year`, `term`, `exam_status`,`disabled`)
+            VALUES ('".$classname."','".$tea_id."','".$sch_id."','".$grade."','".date('Y')."','".$term."','"."0"."','0')";
 // echo $sql_class;
+// exit;
 $result = mysqli_query($conn,$sql_class);
+$sql_class = "SELECT c_id FROM classes WHERE `tea_id`=".$tea_id." ORDER BY c_id DESC";
 
-
+$result = mysqli_query($conn,$sql_class);
+$row = mysqli_fetch_array($result);
+ $c_id=$row[0];
 //todo:建立學生
 if(isset($_SESSION["students_list"])){
     $sql_stu = "SELECT COUNT(*) FROM `students`";
@@ -52,7 +56,7 @@ if(isset($_SESSION["students_list"])){
     $allstudentnum = $row[0];
 
     $students = json_decode($_SESSION["students_list"]);
-    $sql_add_stu ="INSERT INTO `students` (`stu_no`, `stu_id`, `c_id`, `s_name`, `gender`) VALUES ";
+    $sql_add_stu ="INSERT INTO `students` ( `stu_id`, `c_id`, `s_name`, `gender`) VALUES ";
 
     for($i=0;$i<count($students);$i++){
         $student = json_encode($students[$i]);
@@ -60,7 +64,7 @@ if(isset($_SESSION["students_list"])){
         $stu_id= $student_data->Student_ID;
         $stu_name= $student_data->Student_Name;
         $stu_gender= $student_data->Gender;    
-        $sql_add_stu.="('".($allstudentnum+$i)."','".$stu_id."','".$numOfrow."','".$stu_name."','".($stu_gender=="男"?"1":"2")."')".($i==count($students)-1?"":",");
+        $sql_add_stu.="('".$stu_id."','".$c_id."','".$stu_name."','".($stu_gender=="男"?"1":"2")."')".($i==count($students)-1?"":",");
     
     }
     $result= mysqli_query($conn,$sql_add_stu);

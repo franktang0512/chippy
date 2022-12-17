@@ -16,7 +16,7 @@ echo $content;
 <?php
 
 $tea_id = $_SESSION["tea_id"];
-$sql = "SELECT DISTINCT classes.c_id,classes.c_name,c_grade FROM `classes` INNER JOIN teachers ON classes.tea_id=" . $tea_id;
+$sql = "SELECT DISTINCT classes.c_id,classes.c_name,c_grade FROM `classes` INNER JOIN teachers ON classes.disabled='0' AND classes.tea_id=" . $tea_id;
 // echo $sql;
 
 $result = mysqli_query($conn, $sql);
@@ -33,6 +33,9 @@ while ($row = mysqli_fetch_array($result)) {
         <div class="col">
             <input type="button" onclick="showupdateClass(this.id)" id="' . $row[0] . '" class="btn classnamebtn" value="編輯"></input>
         </div>
+        <div class="col">
+        <input type="button" onclick="deleteClass(this.id)" id="' . $row[0] . '" class="btn classnamebtn" value="刪除"></input>
+    </div>
         <div class="row my-1 view" id="preview"></div>
     </div>';
 }
@@ -52,6 +55,7 @@ while ($row = mysqli_fetch_array($result)) {
                         <div class="col header">班級名稱</div>
                         <div class="col header">年級</div>
                         <div class="col header">班級資料更新</div>
+                        <div class="col header">刪除班級</div>
                     </div>
 
                     <?php
@@ -131,6 +135,43 @@ while ($row = mysqli_fetch_array($result)) {
         }
     }
 
+    function deleteClass(click_id) {
+        //ajax在這裡取到
+        var preview = document.getElementById('preview');
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+
+                if (this.responseText.trim() != "") {
+                    var response = this.responseText;
+                    if (response.indexOf("ok")) {
+                        alert("已刪除");
+                        // var preview = document.getElementById('preview');
+                        // preview.style.display = "none";
+                        history.go(0);
+                    } else {
+                        console.log(response);
+                    }
+                }
+            }
+        };
+        // console.log(click_id);
+        xmlhttp.open("POST", "classupdate.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("c_id=" + click_id + "&showform=" + "de");
+
+
+
+        //呈現修改頁面
+
+
+        window.onclick = function(event) {
+            if (event.target == preview) {
+                preview.style.display = "none";
+            }
+        }
+    }
+
     function showupdateStudents(click_id) {
         //ajax在這裡取到
         var preview = document.getElementById('preview');
@@ -177,7 +218,7 @@ while ($row = mysqli_fetch_array($result)) {
                     if (response.indexOf("ok")) {
                         alert("更新完成");
                         var preview = document.getElementById('preview');
-                        preview.style.display="none";
+                        preview.style.display = "none";
                         history.go(0);
                     } else {
                         console.log(response);
@@ -204,7 +245,7 @@ while ($row = mysqli_fetch_array($result)) {
                     if (response.indexOf("ok")) {
                         alert("更新完成");
                         var preview = document.getElementById('preview');
-                        preview.style.display="none";
+                        preview.style.display = "none";
                         classtag.click();
                     } else {
                         console.log(response);
@@ -274,7 +315,7 @@ while ($row = mysqli_fetch_array($result)) {
                     if (response.indexOf("ok")) {
                         alert("新增成功");
                         var preview = document.getElementById('preview');
-                        preview.style.display="none";
+                        preview.style.display = "none";
                         classtag.click();
                     } else {
                         console.log(response);
@@ -299,42 +340,37 @@ while ($row = mysqli_fetch_array($result)) {
 
     }
 
-    // function deleteStudent(click_id) {
-    //     const xmlhttp = new XMLHttpRequest();
-    //     // var span = document.getElementsByClassName("close")[0];
-    //     // span.onclick = function() {
-    //     //     preview.style.display = "none";
-    //     // }
-    //     xmlhttp.onreadystatechange = function() {
-    //         if (this.readyState === 4 && this.status === 200) {
+    function deleteStudent(click_id) {
+        const xmlhttp = new XMLHttpRequest();
 
-    //             if (this.responseText.trim() != "") {
-    //                 var response = this.responseText;
-    //                 if (response.indexOf("ok")) {
-    //                     alert("刪除成功");
-    //                     var preview = document.getElementById('preview');
-    //                     preview.style.display="none";
-    //                     // console.log(classtag);
-    //                     // history.go(0);
-    //                     classtag.click();
-    //                     // span.click();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
 
-    //                 } else {
-    //                     console.log(response);
-    //                 }
-    //             }
-    //         }
-    //     };
+                if (this.responseText.trim() != "") {
+                    var response = this.responseText;
+                    if (response.indexOf("ok")) {
+                        alert("已刪除");
+                        var preview = document.getElementById('preview');
+                        preview.style.display = "none";
+                        classtag.click();
+                    } else {
+                        console.log(response);
+                    }
+                }
+            }
+        };
 
 
-    //     // console.log(c_name);
-    //     xmlhttp.open("POST", "studentupdate.php", true);
-    //     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    //     xmlhttp.send("showform=d" + "&stu_no=" + click_id);
+        // console.log(c_name);
+        xmlhttp.open("POST", "studentupdate.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("showform=d" + "&stu_no=" + click_id );
 
 
 
-    // }
+
+
+    }
 </script>
 
 <?php

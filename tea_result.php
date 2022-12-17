@@ -16,7 +16,9 @@ echo $content;
 <?php
 
 $tea_id = $_SESSION["tea_id"];
-$sql = "SELECT DISTINCT classes.c_id,classes.c_name,c_grade FROM `classes` INNER JOIN teachers ON classes.tea_id = " . $tea_id;
+$sql = "SELECT DISTINCT classes.c_id,classes.c_name,c_grade FROM `classes` INNER JOIN teachers ON classes.disabled=0 AND classes.tea_id = " . $tea_id;
+// echo $sql;
+
 $result = mysqli_query($conn, $sql);
 // echo $sql;
 // $row = mysqli_fetch_array($result);

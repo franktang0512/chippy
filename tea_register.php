@@ -38,16 +38,28 @@ $_SESSION["u_level"]="1";
 //users表建立一個帳號
 $sql ="select * from users";
 $result = mysqli_query($conn,$sql);
-$users_num = mysqli_num_rows($result);
-$_SESSION["u_id"] = $users_num;
-$sql = "INSERT INTO `users` (`u_id`, `u_acc`, `u_psd`, `u_name`, `u_info`, `u_level`) 
-VALUES ('".$users_num."',
+// $users_num = mysqli_num_rows($result);
+// $_SESSION["u_id"] = $users_num;///////////////////////////////////////////////////////////
+$sql = "INSERT INTO `users` ( `u_acc`, `u_psd`, `u_name`, `u_info`, `u_level`) 
+VALUES (
          '".$_POST["account"]."', 
          '".$_POST["password"]."', 
          '".$_POST["name"]."', 
          '', 
          '1')";
+// $sql = "INSERT INTO `users` (`u_id`, `u_acc`, `u_psd`, `u_name`, `u_info`, `u_level`) 
+// VALUES ('".$users_num."',
+//          '".$_POST["account"]."', 
+//          '".$_POST["password"]."', 
+//          '".$_POST["name"]."', 
+//          '', 
+//          '1')";
 $result = mysqli_query($conn,$sql);
+$sql ="select `u_id` from users where u_acc='".$_POST["account"]."'";
+$result = mysqli_query($conn,$sql);
+$row = mysqli_fetch_array($result);
+$_SESSION["u_id"] = $row[0];
+
 // echo $sql;
 // exit;
 
@@ -55,15 +67,19 @@ $result = mysqli_query($conn,$sql);
 
 $sql ="select * from teachers";
 $result = mysqli_query($conn,$sql);
-$teachers_num = mysqli_num_rows($result);
+// $teachers_num = mysqli_num_rows($result);
 
 $email= $_POST["email"];
 $level=$_POST["level"];
 $school=$_POST["school"];
-
-$sql = "INSERT INTO `teachers` (`t_id`, `u_id`, `t_email`, `sch_id`) 
-VALUES ('".$teachers_num."',
-        '".$users_num."', 
+// $sql = "INSERT INTO `teachers` ( `t_id`,`u_id`, `t_email`, `sch_id`) 
+// VALUES ('".$teachers_num."',
+//         '".$users_num."', 
+//         '".$email."',  
+//          '".$school."')";
+$sql = "INSERT INTO `teachers` ( `u_id`, `t_email`, `sch_id`) 
+VALUES (
+        '".$_SESSION["u_id"]."', 
         '".$email."',  
          '".$school."')";
 

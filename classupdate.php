@@ -56,6 +56,27 @@ if($showform=="y"){
 
 
 
+}else if($showform=="de"){
+    $sql = "UPDATE `classes` SET  
+    `disabled` = 1       
+    WHERE `classes`.`c_id` = '".$_POST["c_id"]."'";
+    $result = mysqli_query($conn, $sql);
+    echo $sql;
+    
+    // $row=mysqli_fetch_row($result);
+    if($result)
+    {
+    echo "ok";
+    
+    }
+    else
+    {
+    echo "Error";
+    
+    }
+
+
+
 }
 
 ?>

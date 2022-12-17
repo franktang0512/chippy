@@ -27,13 +27,13 @@ $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
 // //todo:題目的資料
 $td_id = $_SESSION["td_id"];
-$sql = "SELECT DISTINCT tasks_detail.td_id,task_example.e_id, task_example.e_title,tasks_detail.t_id FROM task_example INNER JOIN tasks_detail on task_example.e_id=tasks_detail.e_id AND tasks_detail.td_id =" . $td_id;
+$sql = "SELECT DISTINCT tasks_detail.td_id,task_example.e_id, task_example.e_title,tasks_detail.t_id,task_example.description FROM task_example INNER JOIN tasks_detail on task_example.e_id=tasks_detail.e_id AND tasks_detail.td_id =" . $td_id;
 
 $result = mysqli_query($conn, $sql);
 
 $row = mysqli_fetch_array($result);
 $e_title = $row[2];
-
+$e_description = $row[4];
 
 ?>
 
@@ -181,7 +181,9 @@ $e_title = $row[2];
         <!-- <div id="outer"> -->
     </div>
 
-    <div style="background-color: aqua; width: 10%; border-radius: 10px; margin: auto; text-align:center; font-size: 25;"><h3><?php echo $e_title; ?></h3></div>
+    <div style="background-color: aqua; width: 10%; border-radius: 10px; margin: auto; text-align:center; font-size: 25;">
+        <h3><?php echo $e_title; ?></h3>
+    </div>
     <dialog id="hint" style="text-align:center">
         <p>將清空工作區, 是否確定轉換?</p>
         <button id="hint_yes">確認</button>
@@ -202,7 +204,7 @@ $e_title = $row[2];
         <button id="correct" type="button" class="btn btn-lg btn-outline-secondary" hidden disabled>挑戰完成</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
     </div>
-    
+
     <div id="blocklyDiv"></div>
     <div id="scratchDiv"></div>
     <div id="view" style="margin-bottom: 50px;" class="column canvas-bg ">
@@ -212,8 +214,7 @@ $e_title = $row[2];
             <button class="btn btn-outline-primary m-1" onclick="show_both()">題目+動畫</button>
         </div>
         <textarea id="question" readonly style="height: 100%; width: 100%; font-size: 25; resize: none;">
-            奇比要參加舞蹈比賽，請寫程式控制舞台燈開關，讓舞台上的燈光按照舞台下方的順序變化。
-            舞台上有三盞燈分別為紅燈、綠燈及藍燈，透過控制燈的開關，可以將不同燈光組合成新的顏色。
+            <?php echo $e_description ?>
         </textarea>
         <div id="canvas_div" style="height: 100%; width: 100%; display: none;">
             <canvas id="draw" height="1024" width="1024"></canvas>
@@ -474,7 +475,7 @@ $e_title = $row[2];
 
 
         function backtoquestion() {
-            location.href="../stu_questions.php";
+            location.href = "../stu_questions.php";
             // history.go(-1);
         }
         var aaaaa;
@@ -539,7 +540,7 @@ $e_title = $row[2];
                         var response = this.responseText;
                         // console.log(response);
                         //xml字串轉blockly xml物件
-                        
+
                         var xml_object = Blockly.Xml.textToDom(response);
                         Blockly.Xml.domToWorkspace(xml_object, current_workspace);
                     }
@@ -551,7 +552,8 @@ $e_title = $row[2];
 
         }
         var student_no;
-        function submit_answer(){
+
+        function submit_answer() {
             var xmlString = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(current_workspace));
             console.log(xmlString);
             const xmlhttp = new XMLHttpRequest();
@@ -564,7 +566,7 @@ $e_title = $row[2];
                         // //xml字串轉blockly xml物件
                         // var xml_object = Blockly.Xml.textToDom(response);
                         // Blockly.Xml.domToWorkspace(xml_object, current_workspace);
-                        if(response.indexOf("ok") !== -1){
+                        if (response.indexOf("ok") !== -1) {
                             alert("已更新繳交");
                         }
 
@@ -573,12 +575,13 @@ $e_title = $row[2];
             };
             xmlhttp.open("POST", "stu_submit.php", true);
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send("func=stusub"+"&result="+xmlString);
+            xmlhttp.send("func=stusub" + "&result=" + xmlString);
 
         }
-        function showstulast(s_no){
+//*************************************************** */
+        function showstulast(s_no) {
             student_no = s_no;
-            document.getElementById("submit_button").disabled=false;
+            document.getElementById("submit_button").disabled = false;
             clearCode();
             const xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
