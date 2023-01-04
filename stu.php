@@ -8,9 +8,9 @@ if (!isset($u_level)) {
 }
 // // include('stu_.php');
 // // include('slideshow.php');
-$sql = "SELECT * FROM `tasks` WHERE c_id=".$_SESSION["stu_c_id"];
-// echo $sql;
-// exit;
+$sql = "SELECT * FROM `tasks` WHERE t_open_close=0 AND disabled=0 AND c_id=".$_SESSION["stu_c_id"];
+ //echo $sql;
+ //exit;
 $result = mysqli_query($conn, $sql);
 $task_all_list='<main class="leaderboard__profiles">';
 while($row = mysqli_fetch_array($result)){

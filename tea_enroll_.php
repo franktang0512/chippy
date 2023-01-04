@@ -20,7 +20,7 @@ $classname = $_POST["classname"];
 $tea_acc = $_SESSION["account"];
 $sql_tea = "SELECT teachers.t_id,teachers.sch_id FROM teachers INNER JOIN users ON users.u_id=teachers.u_id AND users.u_acc = '".$tea_acc."'";
 // echo $sql_tea;
-
+//exit;
 $result = mysqli_query($conn,$sql_tea);
 // echo mysqli_num_rows($result);
 $row= mysqli_fetch_array($result);
@@ -56,7 +56,7 @@ if(isset($_SESSION["students_list"])){
     $allstudentnum = $row[0];
 
     $students = json_decode($_SESSION["students_list"]);
-    $sql_add_stu ="INSERT INTO `students` ( `stu_id`, `c_id`, `s_name`, `gender`) VALUES ";
+    $sql_add_stu ="INSERT INTO `students` ( `stu_id`, `c_id`, `s_name`, `gender`,`disabled`) VALUES ";
 
     for($i=0;$i<count($students);$i++){
         $student = json_encode($students[$i]);
@@ -64,9 +64,11 @@ if(isset($_SESSION["students_list"])){
         $stu_id= $student_data->Student_ID;
         $stu_name= $student_data->Student_Name;
         $stu_gender= $student_data->Gender;    
-        $sql_add_stu.="('".$stu_id."','".$c_id."','".$stu_name."','".($stu_gender=="男"?"1":"2")."')".($i==count($students)-1?"":",");
+        $sql_add_stu.="('".$stu_id."','".$c_id."','".$stu_name."','".($stu_gender=="男"?"1":"2")."',0)".($i==count($students)-1?"":",");
     
     }
+	//echo $sql_add_stu;
+	//exit;
     $result= mysqli_query($conn,$sql_add_stu);
 
 }

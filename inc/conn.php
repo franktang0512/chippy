@@ -14,8 +14,8 @@
 
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "viplab";
+$password = "chippy2022";
 $db ="chippy";
 // Create connection
 $conn = new mysqli($servername, $username, $password,$db);

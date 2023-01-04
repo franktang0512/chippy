@@ -62,6 +62,32 @@ function Verify_Password($pPass)
         // die("");
     }
 }
+
+
+function write_log($conn){
+	$session_string = "";
+	foreach ($_SESSION as $name => $value)
+	{
+		$session_string.="$name=".$value.";";
+	}
+	$session_string="'".$session_string."'";
+	$post_string = "";
+	foreach ($_POST as $name => $value)
+	{
+		$post_string.="$name=".$value.";";
+	}
+	$post_string="'".$post_string."'";
+	$page_url = "'".$_SERVER['REQUEST_URI']."'";
+	
+	$logsql ="INSERT INTO `chippy_log` (`excute_time`, `tea_id`, `stu_no`, `page`, `sessioin_content`, `post_content`) VALUES (current_timestamp(), NULL,NULL , $page_url,$session_string ,$post_string )";
+
+	
+	$result = mysqli_query($conn,$logsql);
+	//sleep(1);
+	//echo $result;
+	
+	
+}
 // function input_format($name,$value,$type,$num){
 // 	if ($type=="readonly"){
 // 		if(empty($value)||trim($value)==""){
@@ -736,5 +762,10 @@ function Verify_Password($pPass)
 // 	    $days=substr($d,5,2);
 // 	    $dates = $year."/".$month."/".$days;
 // 	    return $dates;
-// 	}				
+// 	}	
+
+
+
+
+			
 ?>

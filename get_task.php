@@ -10,9 +10,10 @@ $content = "";
 if ($showform == "y") {
     $c_id = $_POST["c_id"];
     $_SESSION["c_id"] = $_POST["c_id"];
+
     $sql = "SELECT c_name,c_grade FROM `classes` WHERE c_id=" . $c_id." AND disabled=0";
-    // echo $sql;
-    // exit;
+     //echo $sql;
+     //exit;
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result);
     $content .= '
@@ -41,6 +42,8 @@ if ($showform == "y") {
     <div id="studentnamelist">
     <div class="row py-4">
         <div class="col header">挑戰名稱</div>
+		<div class="col header">設定預設積木</div>
+		<div class="col header">評量狀態</div>
         <!--div class="col header"></div-->
 
     </div>
@@ -53,8 +56,21 @@ if ($showform == "y") {
     $result = mysqli_query($conn, $sql);
     while ($row = mysqli_fetch_array($result)) {
         $content .= '<div class="row py-4">
+				
                 <div class="col studentinfo">
                 <input class="btn classnamebtn" onClick="edittask(this.id)" type="button" id="'.$row[0].'" value="'.$row[2].'"/>
+                </div>
+				<div class="col studentinfo">
+				
+					<input type="radio" name="'.$row[0].'" value="0" '.($row[5]==0?"checked":"").'  onchange="switch_bs(this);"><label>Blockly</label><br>
+					<input type="radio"  name="'.$row[0].'" value="1" '.($row[5]==1?"checked":"").'  onchange="switch_bs(this);"><label>Scratch</label>
+				
+                </div>
+				<div class="col studentinfo">
+				
+					<input type="radio" name="oc'.$row[0].'" value="0" '.($row[3]==0?"checked":"").'  onchange="opentostu(this);"><label>開放</label><br>
+					<input type="radio"  name="oc'.$row[0].'" value="1" '.($row[3]==1?"checked":"").'  onchange="opentostu(this);"><label>關閉</label>
+				
                 </div>
             </div>';
     }
@@ -69,8 +85,8 @@ if ($showform == "y") {
     // $result = mysqli_query($conn, $sql);
     // $row = mysqli_fetch_array($result);
 
-    $sql = "INSERT INTO `tasks` (`c_id`, `t_title`) 
-                            VALUES ( '" . $c_id . "', '" . $t_title . "')";
+    $sql = "INSERT INTO `tasks` (`c_id`, `t_title`, `t_open_close`, `disabled`,`scratch_or_blookly`) 
+                            VALUES ( '" . $c_id . "', '" . $t_title . "',0,0,0)";
 
     $result = mysqli_query($conn, $sql);
 
@@ -89,8 +105,14 @@ if ($showform == "y") {
 
 }else if ($showform == "c") {
     $tlevel = $_POST["tlevel"];
+	$sql="";
+	if($tlevel == "0"){
+		$sql = "SELECT * FROM `task_example` WHERE disabled=0";
+	}else{
+		$sql = "SELECT * FROM `task_example` WHERE e_level=".$tlevel." AND disabled=0";
+	}
 
-    $sql = "SELECT * FROM `task_example` WHERE e_level=".$tlevel." AND disabled=0";
+    
     
     // echo $sql;
     $result = mysqli_query($conn, $sql);
@@ -98,9 +120,9 @@ if ($showform == "y") {
     $o_e=1;
     while($row = mysqli_fetch_array($result)){
         if($o_e%2==1){
-            $tasklist .= '<div class="tasklist row odd"><input type="checkbox" id="task" name="task" value="'.$row[0].'"/>'.$row[1].'</div><br>';
+            $tasklist .= '<div class="tasklist row odd"><input type="checkbox" id="task" name="task" value="'.$row[0].'"/>'.$row[1].'</div>';
         }else{
-            $tasklist .= '<div class="tasklist row even"><input type="checkbox" id="task" name="task" value="'.$row[0].'"/>'.$row[1].'</div><br>';
+            $tasklist .= '<div class="tasklist row even"><input type="checkbox" id="task" name="task" value="'.$row[0].'"/>'.$row[1].'</div>';
         }
         $o_e++;
         
@@ -135,18 +157,15 @@ if ($showform == "y") {
     $t_id = $_SESSION["t_id"];
 
     $sql = "SELECT COUNT(*) FROM `tasks_detail` WHERE t_id = ".$t_id;
+
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result);
     $alltasks = $row[0];
+
     if($alltasks>0){
         echo "err";
         exit;
     }
-
-
-
-
-
 
 
     // $taskexamplelist = $_POST["taskexamplelist"];
@@ -158,18 +177,18 @@ if ($showform == "y") {
     $row = mysqli_fetch_array($result);
     $alltasks = $row[0];
 
-    $sql = "INSERT INTO `tasks_detail` (`td_id`, `t_id`, `e_id`) VALUES ";
+    $sql = "INSERT INTO `tasks_detail` (`t_id`, `e_id`,`disabled`) VALUES ";
 
     for($i=0;$i<count($taskexamplelist);$i++){
         $tes = json_encode($taskexamplelist[$i]);
         $te = json_decode($tes);
         $e_id= $te->e_id;
-        $sql.='('.($alltasks+$i).','.$t_id.','.$e_id.')'.($i==count($taskexamplelist)-1?"":",");
+        $sql.='('.$t_id.','.$e_id.',0)'.($i==count($taskexamplelist)-1?"":",");
 
     }
 
-    // echo $sql;
-    // exit;
+     //echo $sql;
+     //exit;
     $result = mysqli_query($conn, $sql);
     if($result){
         echo "ok";
@@ -178,4 +197,29 @@ if ($showform == "y") {
     }
     // echo $taskexamplelist;
 
+}else if ($showform == "bs") {
+	$t_id = $_POST["t_id"];
+	$bs = $_POST["bs"];
+	$sql = "UPDATE `tasks` SET `scratch_or_blookly` = ".$bs." WHERE `tasks`.`t_id` =".$t_id;
+	$result = mysqli_query($conn, $sql);
+	if($result){
+		echo "ok";
+	}else{
+		echo "error";
+	}
+
+	
+}else if ($showform == "oc") {
+	$t_id = $_POST["t_id"];
+	$oc = $_POST["oc"];
+	$sql = "UPDATE `tasks` SET `t_open_close` = ".$oc." WHERE `tasks`.`t_id` =".$t_id;
+	$result = mysqli_query($conn, $sql);
+	if($result){
+		echo "ok";
+		
+	}else{
+		echo "error";
+	}
+
+	
 }

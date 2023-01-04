@@ -34,6 +34,8 @@ $_SESSION["school_id"]=$_POST["school"];
 $_SESSION["u_level"]="1";
 // $_SESSION["u_id"] = "0";
 
+//print_r($_SESSION);
+//exit;
 
 //users表建立一個帳號
 $sql ="select * from users";
@@ -77,12 +79,14 @@ $school=$_POST["school"];
 //         '".$users_num."', 
 //         '".$email."',  
 //          '".$school."')";
-$sql = "INSERT INTO `teachers` ( `u_id`, `t_email`, `sch_id`) 
+$sql = "INSERT INTO `teachers` ( `u_id`, `t_email`, `sch_id`,`disabled`) 
 VALUES (
         '".$_SESSION["u_id"]."', 
         '".$email."',  
-         '".$school."')";
-
+         '".($school==""?"52":$school)."',
+		 0)";
+//echo $sql;
+//exit;
 $result = mysqli_query($conn,$sql);
 
 header("Location:login_ok.php");

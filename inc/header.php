@@ -16,7 +16,7 @@ include("func.php");
 // include the header for all pages
 include("header_.php");
 
-include("title.php");
+include("title.php"); 
 
 
 ?>

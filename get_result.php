@@ -10,7 +10,7 @@ $content = "";
 if ($showform == "y") {
     $c_id = $_POST["c_id"];
     $_SESSION["c_id"] = $_POST["c_id"];
-    $sql = "SELECT c_name,c_grade FROM `classes` WHERE c_id=" . $c_id;
+    $sql = "SELECT c_name,c_grade FROM `classes` WHERE c_id=" . $c_id." AND disabled=0";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result);
     $content .= '
@@ -37,7 +37,7 @@ if ($showform == "y") {
 
     //classname, 年級,(評量狀態),,
 
-    $sql = "SELECT * FROM `tasks` WHERE c_id=" . $c_id;
+    $sql = "SELECT * FROM `tasks` WHERE c_id=" . $c_id." AND disabled=0";
     $result = mysqli_query($conn, $sql);
     while ($row = mysqli_fetch_array($result)) {
         $content .= '<div class="row py-4">
@@ -53,12 +53,12 @@ if ($showform == "y") {
 } else if ($showform == "a") {
     $t_title = $_POST["t_title"];
     $c_id = $_SESSION["c_id"];
-    $sql = "SELECT COUNT(*) FROM `tasks`";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_array($result);
+    //$sql = "SELECT COUNT(*) FROM `tasks`";
+    //$result = mysqli_query($conn, $sql);
+    //$row = mysqli_fetch_array($result);
 
-    $sql = "INSERT INTO `tasks` (`t_id`, `c_id`, `t_title`) 
-                            VALUES ('" . $row[0] . "', '" . $c_id . "', '" . $t_title . "')";
+    $sql = "INSERT INTO `tasks` ( `c_id`, `t_title`) 
+                            VALUES ( '" . $c_id . "', '" . $t_title . "')";
 
     $result = mysqli_query($conn, $sql);
 
@@ -167,7 +167,7 @@ if ($showform == "y") {
 }else if ($showform == "tq") {
     $t_id = $_POST["t_id"];
     $_SESSION["t_id"]= $_POST["t_id"];
-    $sql="SELECT DISTINCT tasks_detail.td_id,task_example.e_id, task_example.e_title,tasks_detail.t_id FROM task_example INNER JOIN tasks_detail on task_example.e_id=tasks_detail.e_id AND tasks_detail.t_id =".$t_id;
+    $sql="SELECT DISTINCT tasks_detail.td_id,task_example.e_id, task_example.e_title,tasks_detail.t_id FROM task_example INNER JOIN tasks_detail on task_example.e_id=tasks_detail.e_id AND tasks_detail.t_id =".$t_id." AND tasks_detail.disabled=0 AND task_example.disabled=0";
     // echo $sql;
     // exit;
     $result = mysqli_query($conn, $sql);
@@ -221,9 +221,20 @@ if ($showform == "y") {
 }else if ($showform == "td"){
     $td_id = $_POST["td_id"];
     $_SESSION["td_id"]= $_POST["td_id"];
-    if($_SESSION["t_id"]!=""){
-        echo "ok";
-    }
+	//取得js path 及goal_or_problem
+	$sql="SELECT DISTINCT task_example.jspath,task_example.e_problem_goal,task_example.e_id  FROM task_example INNER JOIN tasks_detail on task_example.e_id=tasks_detail.e_id AND tasks_detail.td_id =".$td_id." AND tasks_detail.disabled=0 AND task_example.disabled=0";
+    $result = mysqli_query($conn, $sql);
+	if(!$result){
+		echo "err";
+	}
+
+	$row = mysqli_fetch_array($result);
+	$_SESSION["e_id"]=$row[2];
+	$_SESSION["jspath"]=$row[0];
+	echo $row[1];//回傳是否為問題導向或目標導向
+	//if($_SESSION["t_id"]!=""){
+    //    echo "ok";
+    //}
 
 
 

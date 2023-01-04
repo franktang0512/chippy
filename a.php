@@ -90,8 +90,9 @@ if (isset($_POST["account"])) {
     $classname=$_POST["classname"];
     $sql = "SELECT DISTINCT c_id 
             FROM classes
-            JOIN teachers ON classes.c_name= '".$classname."' AND classes.tea_id= ".$_SESSION["stu_t_id"];
-    // echo $sql;
+            JOIN teachers ON classes.c_name= '".$classname."' AND classes.tea_id= ".$_SESSION["stu_t_id"]." ORDER BY c_id DESC";
+    //echo $sql;
+	//exit;
     $result = mysqli_query($conn, $sql);
     $numOfrow = mysqli_num_rows($result);
     if($numOfrow==0){
@@ -114,6 +115,7 @@ if (isset($_POST["account"])) {
     $result = mysqli_query($conn, $sql);
     $numOfrow = mysqli_num_rows($result);
     if($numOfrow==0){
+		echo $sql;
         echo "教師、班級、學號有誤，請重新輸入<br>";
         // echo $errmsg . "<br><br>";
         echo "<a href=\"login.php\">回上一頁</a>&nbsp;&nbsp;&nbsp;";

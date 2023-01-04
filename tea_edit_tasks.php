@@ -28,7 +28,7 @@ $classes_list = "";
 while ($row = mysqli_fetch_array($result)) {
     $classes_list .= '<div class="row py-2"><div class="col">';
 
-    $classes_list .= '<input type="button" class="btn classnamebtn"  onclick="showtask(this.id)" id="' . $row[0] . '" value=' . $row[1] . '>';
+    $classes_list .= '<input type="button" class="btn classnamebtn"  onClick="showtask(this.id);" id="' . $row[0] . '" value=' . $row[1] . '>';
 
     $classes_list .= '</div>
     <div class="col">' . $row[2] . '</div>
@@ -97,17 +97,20 @@ while ($row = mysqli_fetch_array($result)) {
         var preview = document.getElementById('preview');
 
 
-        preview.innerHTML = `<div class="container precontent">
-                            <span class="close">&times;</span>
-                            <h3> 新增挑戰 </h3>
-                            <div class="row">
-                            <div class="col header">挑戰名稱</div>
-                            <div class="col header">確認新增</div>
-                            </div>
-                            <div class="row even">
-                            <div class="col pre"><input type="text" id="t_title" value=""/></div>
-                            <div class="col pre"><input type="button" id="" onClick="addTask()" value="新增"/></div>
-                            </div>`;
+        preview.innerHTML = "<div class='container precontent'>"+
+		                    "<span class='close'>&times;</span>"+
+                            "<h3> 新增挑戰 </h3>"+
+                            "<div class='row>"+
+                            "<div class='col header'>挑戰名稱</div>"+
+                            "<div class='col header'>確認新增</div>"+
+							"<div class='row even'>"+
+                            "<div class='col pre'><input type='text' id='t_title' value=''/></div>"+
+                            "<div class='col pre'><input type='button' id='' onClick='addTask()' value='新增'/></div>"+
+							
+							
+                            "</div>"+
+                            
+                            "</div>";
         preview.style.display = "block";
 
         var span = document.getElementsByClassName("close")[0];
@@ -142,6 +145,7 @@ while ($row = mysqli_fetch_array($result)) {
                     } else {
                         console.log(response);
                     }
+					console.log(response);
                 }
             }
         };
@@ -182,30 +186,7 @@ while ($row = mysqli_fetch_array($result)) {
         var preview = document.getElementById('preview');
 
 
-        preview.innerHTML = `<div class="container precontent">
-                                <span class="close">&times;</span>
-                                <fieldset>
-                                    <legend>挑戰級別:</legend>
-                                    <div >
-                                    <input type="radio" id="G00" name="tasklevel" value="1" onclick="handleClick(this);" >
-                                    <label  for="G00">練習</label>&nbsp;&nbsp;
-                                    <input type="radio" id="G1" name="tasklevel" value="2" onclick="handleClick(this);">
-                                    <label  for="G1">目標導向基礎</label>&nbsp;&nbsp;
-                                    <input type="radio" id="G2" name="tasklevel" value="3" onclick="handleClick(this);">
-                                    <label  for="G2">目標導向挑戰</label>&nbsp;&nbsp;
-                                    <input type="radio" id="G3" name="tasklevel" value="4" onclick="handleClick(this);">
-                                    <label class="px-2" for="G3">運算思維與程式設計(高中)</label>&nbsp;&nbsp;<br>
-                                    <input type="radio" id="P1" name="tasklevel" value="5" onclick="handleClick(this);">
-                                    <label  for="P1">問題導向基礎</label>&nbsp;&nbsp;
-                                    <input type="radio" id="P2" name="tasklevel" value="6" onclick="handleClick(this);">
-                                    <label  for="P2">問題導向進階</label>&nbsp;&nbsp;
-                                    <input type="radio" id="P3" name="tasklevel" value="7" onclick="handleClick(this);">
-                                    <label  for="P3">問題導向挑戰</label>&nbsp;&nbsp;</div>
-                                </fieldset>
-                                
-                                <div class="" id="showexamples"></div>
-
-                            </div>`;
+        preview.innerHTML = '<div class="container precontent"><span class="close">&times;</span>       <fieldset><legend>挑戰級別:</legend><div ><input type="radio" id="G00" name="tasklevel" value="0" onclick="handleClick(this);" ><label  for="G00">全部</label>&nbsp;&nbsp;<input type="radio" id="G00" name="tasklevel" value="1" onclick="handleClick(this);" ><label  for="G00">練習</label>&nbsp;&nbsp;<input type="radio" id="G1" name="tasklevel" value="2" onclick="handleClick(this);"><label  for="G1">目標導向基礎</label>&nbsp;&nbsp;<input type="radio" id="G2" name="tasklevel" value="3" onclick="handleClick(this);"><label  for="G2">目標導向挑戰</label>&nbsp;&nbsp;<input type="radio" id="G3" name="tasklevel" value="4" onclick="handleClick(this);"><label class="px-2" for="G3">運算思維與程式設計(高中)</label>&nbsp;&nbsp;<br><input type="radio" id="P1" name="tasklevel" value="5" onclick="handleClick(this);"><label  for="P1">問題導向基礎</label>&nbsp;&nbsp;<input type="radio" id="P2" name="tasklevel" value="6" onclick="handleClick(this);"><label  for="P2">問題導向進階</label>&nbsp;&nbsp;<input type="radio" id="P3" name="tasklevel" value="7" onclick="handleClick(this);"><label  for="P3">問題導向挑戰</label>&nbsp;&nbsp;</div></fieldset><div class="" id="showexamples"></div>  </div>';
         preview.style.display = "block";
 
         var span = document.getElementsByClassName("close")[0];
@@ -232,13 +213,15 @@ while ($row = mysqli_fetch_array($result)) {
         xmlhttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
 
-                var response = this.responseText;
-                var showexamples = document.getElementById('showexamples');
-                showexamples.innerHTML = response;
+				var showexamples = document.getElementById('showexamples');
                 if (this.responseText.trim() != "") {
+					var response = this.responseText;
+					
+					showexamples.innerHTML = response;
 
-
-                }
+                }else{
+					showexamples.innerHTML = "查無結果";
+				}
             }
         };
         xmlhttp.open("POST", "get_task.php", true);
@@ -266,8 +249,7 @@ while ($row = mysqli_fetch_array($result)) {
             if (this.readyState === 4 && this.status === 200) {
 
                 var response = this.responseText;
-                
-                if (this.responseText.trim() != "") {
+				if (this.responseText.trim() != "") {
                     // console.log(response.indexOf("ok")!==-1);
                     if (response.indexOf("ok")!==-1) {
                         alert("級別與題目設定完成");
@@ -279,12 +261,62 @@ while ($row = mysqli_fetch_array($result)) {
                         preview.style.display = "none";
                     }
                 }
+
             }
         };
         xmlhttp.open("POST", "get_task.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("showform=comfirm&taskexamplelist=" + taskexamplelist);
     }
+	function switch_bs(tid){		
+		const xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+
+                var response = this.responseText;
+				if (this.responseText.trim() != "") {
+                    // console.log(response.indexOf("ok")!==-1);
+					if (response.indexOf("ok")!==-1){
+						alert("更改成功");
+					}
+                }
+
+            }
+        };
+        xmlhttp.open("POST", "get_task.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("showform=bs&t_id="+tid.name+"&bs="+tid.value);
+		
+	}
+	function opentostu(tid){
+		const xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+
+                var response = this.responseText;
+				if (this.responseText.trim() != "") {
+                    // console.log(response.indexOf("ok")!==-1);
+					if (response.indexOf("ok")!==-1){
+						if(tid.value=='0'){
+							alert("已開放挑戰");
+						}else if(tid.value=='1'){
+							alert("已關閉挑戰");
+						}
+						
+					}
+                }
+
+            }
+        };
+        xmlhttp.open("POST", "get_task.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("showform=oc&t_id="+tid.name.slice(2)+"&oc="+tid.value);
+		
+	}
+	
+	
 </script>
 
 <?php

@@ -6,7 +6,6 @@ function handleFileSelect(evt) {
 
 
 
-
 document.getElementById("studentlist").onchange = (evt) => {
     // (A) NEW FILE READER
     var reader = new FileReader();

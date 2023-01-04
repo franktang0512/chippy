@@ -68,8 +68,8 @@ if ($showform == "y") {
     // $result = mysqli_query($conn, $sql);
     // $row = mysqli_fetch_array($result);
 
-    $sql = "INSERT INTO `students` (`stu_id`, `c_id`, `s_name`, `gender`) 
-                            VALUES ( '" . $stu_id . "', '" . $_SESSION["c_id"] . "', '" . $s_name . "', '" . $gender . "')";
+    $sql = "INSERT INTO `students` (`stu_id`, `c_id`, `s_name`, `gender`,`disabled`) 
+                            VALUES ( '" . $stu_id . "', '" . $_SESSION["c_id"] . "', '" . $s_name . "', '" . $gender . "',0)";
 
     $result = mysqli_query($conn, $sql);
 

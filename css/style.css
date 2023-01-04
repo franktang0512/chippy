@@ -78,10 +78,11 @@ html
 }
 
 .studentlists {
-  height: 90vh;
+  //height: 90vh;
   width: 10%;
   background-color: #E6F7FF;
   overflow: auto;
+  margin-bottom: 60px;
 }
 
 

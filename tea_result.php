@@ -256,9 +256,15 @@ while ($row = mysqli_fetch_array($result)) {
 
                 if (this.responseText.trim() != "") {
                     // console.log(response.indexOf("ok")!==-1);
-                    if (response.indexOf("ok") !== -1) {
-                        location.href = 'goalbased/tea_show_student_result.php';
-                    } 
+
+
+					if (response.indexOf("1") !== -1) {
+                        location.href = 'goalbased/goal_base.php';
+                    }else if (response.indexOf("2") !== -1) {
+                        location.href = 'goalbased/problem_base.php';
+                    } else{
+						
+					}
                 }
             }
         };

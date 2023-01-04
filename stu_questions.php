@@ -2,7 +2,7 @@
 include('inc/header.php');
 
 extract($_SESSION);
-if (!isset($u_level)) {
+if (!isset($u_level)||$u_level!="0") {
     //未登入返回index
     header("Location:index.php");
 }
@@ -15,7 +15,7 @@ ON tasks_detail.t_id=".$t_id." AND task_example.e_id=tasks_detail.e_id";
 // echo $sql;
 // exit;
 $result = mysqli_query($conn, $sql);
-$task_all_list='<main class="leaderboard__profiles">';
+$task_all_list='<main class="leaderboard__profiles" style = "padding-bottom: 50px;">';
 while($row = mysqli_fetch_array($result)){
     $task_all_list.='    
     <article class="leaderboard__profile" onclick="showquestions(this.id)" id='.$row[0].'>
@@ -43,10 +43,14 @@ echo $head_title.$task_all_list;
 
                 if (this.responseText.trim() != "") {
                     // console.log(response.indexOf("ok")!==-1);
-                    if (response.indexOf("ok") !== -1) {
-                        location.href ='goalbased/stu_show_question.php';
+
+					if (response.indexOf("1") !== -1) {
+                        location.href ='goalbased/goal_base.php';
                         // location.href = 'goalbased/tea_show_student_result.php';
-                    } 
+                    } else if (response.indexOf("2") !== -1) {
+                        location.href ='goalbased/problem_base.php';
+                        // location.href = 'goalbased/tea_show_student_result.php';
+                    }
                 }
             }
         };
